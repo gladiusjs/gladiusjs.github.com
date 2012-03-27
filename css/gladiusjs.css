@@ -1,3 +1,13 @@
+h1, h2, h3, h4, h5, h6, .huge, .large {
+  font-family: 'Open Sans Light',sans-serif;
+  font-weight: normal;
+  display: block;
+  margin: 0pt 0pt 12px;
+  line-height: 100%;
+  text-shadow: 0pt 1px 0pt rgba(255, 255, 255, 0.75);
+  color: rgb(72, 72, 72);
+}
+
 #masthead {
   display: block;
   position: relative;
@@ -11,6 +21,7 @@
 nav, header {
   display: block;
 }
+
 #masthead nav ul li a, #masthead nav ul li b {
   display: inline-block;
   padding: 12px;
