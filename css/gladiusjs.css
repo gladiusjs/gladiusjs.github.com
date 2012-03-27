@@ -50,10 +50,44 @@ nav, header {
     font: 12px Georgia,serif;
 }
 
+#leftCol, #rightCol {
+  display: inline-block;
+}
+
+#mainDiv {
+  display: block;
+}
+
 #gameShot {
   float: left;
 }
 
-#mainStory {
+.buttonBlue, .buttonBlue:link, .buttonBlue:visited {
+  background-color: rgb(39, 97, 149);
+  background-repeat: repeat-x;
+  background-image: -moz-linear-gradient(rgb(60,136,204), rgb(39, 97,149));
+}
+
+.buttonBlue:hover, .buttonBlue:link:hover, .buttonBlue:visited:hover {
+  box-shadow: 0pt 2px 0pt 0pt rgba(0, 0, 0, 0.1),
+              0pt -2px 0pt 0pt rgba(0, 0, 0, 0.2) inset,
+              0pt 12px 24px 2px rgb(48, 137, 216) inset;
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+  -moz-transition: all 0.25s linear 0s;
+}
+
+.button {
+  height: auto;
   display: inline-block;
+  font-size: 18px;
+  line-height: 24px;
+  text-align: center;
+  float: none;
+}
+
+.button small {
+  display: block;
+  font-size: 12px;
+  line-height: 16px;
 }
