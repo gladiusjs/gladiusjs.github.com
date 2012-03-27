@@ -49,3 +49,11 @@ nav, header {
     color: gray;
     font: 12px Georgia,serif;
 }
+
+#gameShot {
+  float: left;
+}
+
+#mainStory {
+  display: inline-block;
+}
