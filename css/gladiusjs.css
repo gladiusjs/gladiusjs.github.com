@@ -33,3 +33,8 @@ nav, header {
   font-family: 'Open Sans',sans-serif;
 }
 
+.projDesc {
+    margin: 6px;
+    color: gray;
+    font: 12px Georgia,serif;
+}
