@@ -1,0 +1,361 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>DRAFT Gladius Status Board</title>
+    <link rel="stylesheet" href="css/screen.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!-- Adding "maximum-scale=1" fixes the Mobile Safari auto-zoom bug: http://filamentgroup.com/examples/iosScaleBug/ -->
+  </head>
+  <body>
+    <div id="menu">
+      <div class="menuItem">
+        <a href="index.html">Home</a>
+      </div>
+
+      <div class="menuItem">
+        <a href="features.html">Features</a>
+      </div>
+
+      <div class="menuItem">
+        <a href="roadmap.html">Roadmap</a>
+      </div>
+
+      <div class="menuItem">
+        <a href="docs.html">Docs</a>
+      </div>
+
+      <div class="menuItem">
+        <a href="community.html">Community</a>
+      </div>
+    </div>
+
+    <!-- XXX link people to Mozillians -->    
+    <font color="red"><b>DRAFT</b></font>
+
+    <h2>
+        Getting started
+    </h2>
+
+    In order to start using gladius, you will need to add a new script tag to your
+    web page:
+
+    <div style="background-color:white;">
+    <pre>
+    &ltscript src="gladius.js"&gt&lt/script&gt
+    </pre>
+    </div>
+
+    We should also make a canvas on the page:
+
+    <div style="background-color:white;">
+    <pre>
+    &ltcanvas id="test-canvas" width="320" height="240"&gt
+    </pre>
+    </div>
+
+    Once this script is loaded you will have access to the gladius object. Now you
+should create an engine instance:
+
+    <div style="background-color:white;">
+    <pre>
+    gladius.create(
+    {
+      services: {
+        graphics: {
+          src: 'graphics/service',
+          options: {
+            canvas: document.getElementById( "test-canvas" )
+          }
+        }
+      }
+    },
+    game
+    );
+    </pre>
+    </div>
+
+    Engine instances are constructed asynchronously and your callback, game, will
+be invoked, with the engine instance as a parameter, when the engine is ready.
+Your game callback function should look like this:
+
+    <div style="background-color:white;">
+    <pre>
+    function game( engine ) {
+      ...
+    }
+    </pre>
+    </div>
+
+    <h2>
+        Engine instance
+    </h2>
+
+    Once you have access to an engine instance you can build the pieces of your
+simulation. Start by creating a new space:
+
+    <div style="background-color:white;">
+    <pre>
+    var space = new engine.core.Space();
+    </pre>
+    </div>
+
+    A space manages a collection of entities. Entities represent game objects in
+your simulation. Let's create one (a cube) and add it to the space:
+
+    <div style="background-color:white;">
+    <pre>
+    var cube = new engine.core.Entity({ name: 'MyCube' });
+    space.add( cube );
+    </pre>
+    </div>
+
+    Every entity may have a name that allows it to be found in the space. An entity
+isn't very interesting unless it has some components. Components carry data and
+logic for a particular aspect of a simulation, like graphics or physics. Let's
+add some graphics to our cube.
+
+    <h2>
+        Loading resources
+    </h2>
+
+    We will need a mesh and a material. The engine instance has an API for
+loading resources, and we can use it to produce a mesh and a material using
+an external script:
+
+    <div style="background-color:white;">
+    <pre>
+    var resources = {};
+    engine.core.resource.get(
+      [
+        {
+          load: engine.core.resource.proceduralLoad,
+          url: 'procedural-mesh.js',
+          type: engine.graphics.resource.Mesh,
+          onsuccess: function( mesh ) {
+            resources.mesh = mesh;
+          },
+          onfailure: function( error ) {
+            }
+        },
+        {
+          load: engine.core.resource.proceduralLoad,
+          url: 'procedural-material.js',
+          type: engine.graphics.resource.Material,            
+          onsuccess: function( material ) {
+            resources.material = material;
+          },
+          onfailure: function( error ) {
+          }
+        }
+      ],
+      {
+        oncomplete: run
+      }
+    );
+    function run() {
+      ...
+    }; 
+    </pre>
+    </div>
+
+    The engine's resource loader allows your simulation to fetch a collection of
+resources and execute a callback for each load, as well as a final callback
+when all the loads have completed. The load parameter specifies the method for
+fetching the raw data. In this case we will procedurally generate the data. The
+url parameter is passed to the load method. For this method the url is the
+script we will run. The type parameter gives a constructor to invoke with the
+raw data. In this case we are making a mesh and a material, so those are the
+constructors we give.
+<p>
+Finally, onsuccess is invoked when the whole process is complete and it receives
+a resource instance of the expected type. In the code above, we capture the
+instances so we can use them later. The last callback, oncomplete, is invoked
+when all the resources have been loaded. We can call run() when all our
+resources have loaded and finish setting up the simulation.
+
+    <h2>
+        Graphics
+    </h2>
+
+    In order to add graphics to the cube entity, we will need to add a transform
+component and a model component. The transform holds data about the cube's
+position, rotation and scale. The model will store the mesh and material we
+want to use.
+
+    <div style="background-color:white;">
+    <pre>
+    cube.add( new engine.core.component.Transform({
+      rotation: math.Vector3( 1, 2, 3 )
+    });
+    </pre>
+    </div>    
+
+    The code above will create a new transform with an initial rotation of [1, 2, 3]
+radians. Now we can add a new model to the entity:
+
+    <div style="background-color:white;">
+    <pre>
+    cube.add( new engine.graphics.component.Model({
+      mesh: resources.mesh,
+      material: resources.material
+    });
+    </pre>
+    </div>
+
+    We need to add a camera to the space in order to render the simulation. We need
+a second entity to represent the camera:
+
+    <div style="background-color:white;">
+    <pre>
+    var camera = new engine.core.Entity({
+      name: 'Mycamera',
+      components: [
+        new engine.core.component.Transform({
+          position: math.Vector3( 0, 0, 2 )
+        }),
+        new engine.graphics.component.Camera({
+          active: true,
+          width: 320,
+          height: 240
+        }),
+        new engine.graphics.component.Light()
+      ]
+    });
+    space.add( camera );
+    camera.target = cube.find( 'Transform' ).position;
+    </pre>
+    </div>
+
+Notice that the camera also requires a transform. The width and height
+parameters should match the dimensions of the test canvas we created earlier.
+<p>
+Finally, notice that we offset the camera from the origin by setting its
+position, and we set its target to point at the position of the cube.
+
+  <h2>
+    Putting it all together
+  </h2>
+
+Now that we've set up our simulation, we need to start the engine:
+
+    <div style="background-color:white;">
+    <pre>
+    engine.run();
+    </pre>
+    </div>
+
+Doing this will start the scheduler, which is responsible for running scheduled
+tasks each frame in the correct order. In this simulation, the graphics service
+has a task that runs and is responsible for rendering the simulation to the
+canvas. A more complicated simulation would have tasks to handle input, physics,
+sound, and other simulation elements.
+<p>
+Below is the entire program:
+
+    <div style="background-color:white;">
+    <pre>
+&lt!DOCTYPE html&gt
+&lthtml&gt
+
+&lthead&gt
+  &ltscript src='gladius.js'&gt
+  &lt/script&gt
+  &ltscript&gt
+    document.addEventListener("DOMContentLoaded", function( event ) {
+      function game( engine ) {
+        var math = engine.math;
+        
+        var space = new engine.core.Space();
+        
+        var cube = new engine.core.Entity({ name: 'MyCube' });
+        space.add( cube );
+        
+        var resources = {};
+        engine.core.resource.get(
+          [
+              {
+                load: engine.core.resource.proceduralLoad,
+                  url: 'procedural-mesh.js',
+                  type: engine.graphics.resource.Mesh,
+                    onsuccess: function( mesh ) {
+                        resources.mesh = mesh;
+                    },
+                    onfailure: function( error ) {
+                        }
+                },
+                {
+                    load: engine.core.resource.proceduralLoad,
+                    url: 'procedural-material.js',
+                  type: engine.graphics.resource.Material,            
+                    onsuccess: function( material ) {
+                        resources.material = material;
+                    },
+                    onfailure: function( error ) {
+                        }
+            }
+          ],
+            {
+                oncomplete: run
+            }
+        );
+        
+        function run() {
+          cube.add( new engine.core.component.Transform({
+            rotation: math.Vector3( 1, 2, 3 )
+          }));
+          cube.add( new engine.graphics.component.Model({
+            mesh: resources.mesh,
+            material: resources.material
+          }));
+          
+          var camera = new engine.core.Entity({
+            name: 'Mycamera',
+            components: [
+              new engine.core.component.Transform({
+                position: math.Vector3( 0, 0, 2 )
+              }),
+              new engine.graphics.component.Camera({
+                active: true,
+                      width: 320,
+                      height: 240
+                  }),
+                  new engine.graphics.component.Light()
+            ]
+          });
+          
+          space.add( camera );
+          camera.target = cube.find( 'Transform' ).position;
+          
+          engine.run();
+        };
+      };
+    
+      var testCanvas = document.getElementById( "test-canvas" );
+      gladius.create(
+        {
+          services: {
+            graphics: {
+              src: 'graphics/service',
+              options: {
+                canvas: testCanvas
+              }
+            }
+        }
+        },
+        game
+      );
+    });
+&lt/script&gt
+&lt/head&gt
+&ltbody&gt
+  &ltcanvas id="test-canvas" width="320" height="240"&gt
+  &lt/canvas&gt
+&lt/body&gt
+
+&lt/html&gt
+    </pre>
+    </div>
+
+  </body>
+</html>
