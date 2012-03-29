@@ -1,5 +1,5 @@
 h1, h2, h3, h4, h5, h6, .huge, .large {
-  font-family: 'Open Sans Light',sans-serif;
+  font-family: 'OpenSans', sans-serif;
   font-weight: normal;
   display: block;
   margin: 0pt 0pt 12px;
@@ -12,6 +12,7 @@ h1, h2, h3, h4, h5, h6, .huge, .large {
   display: block;
   position: relative;
   width: 712px;
+  padding-top: 10px;
   padding-left: 24px;
   padding-right: 24px;
   margin: 0pt auto;
@@ -20,6 +21,10 @@ h1, h2, h3, h4, h5, h6, .huge, .large {
 
 nav, header {
   display: block;
+}
+
+#nav-main {
+  min-width: 420px;
 }
 
 #masthead nav ul li a, #masthead nav ul li b {
@@ -40,8 +45,8 @@ nav, header {
   float: right;
   margin-right: 16px;
   text-transform: uppercase;
-  font-size: 13px;
-  font-family: 'Open Sans',sans-serif;
+  font-size: 15px;
+  font-family: 'OpenSans',sans-serif;
 }
 
 .projDesc {
@@ -50,12 +55,19 @@ nav, header {
     font: 12px Georgia,serif;
 }
 
-#leftCol, #rightCol {
+#leftCol {
   display: inline-block;
+  float: left;
+}
+
+#rightCol {
+  display: inline-block;
+  float: right;
 }
 
 #mainDiv {
   display: block;
+  min-width: 800px;
 }
 
 #gameShot {
@@ -66,6 +78,8 @@ nav, header {
   background-color: rgb(39, 97, 149);
   background-repeat: repeat-x;
   background-image: -moz-linear-gradient(rgb(60,136,204), rgb(39, 97,149));
+  background-image: -webkit-linear-gradient(rgb(60,136,204), rgb(39, 97,149));
+  background-image: linear-gradient(rgb(60,136,204), rgb(39, 97,149));
 }
 
 .buttonBlue:hover, .buttonBlue:link:hover, .buttonBlue:visited:hover {
@@ -78,10 +92,11 @@ nav, header {
 }
 
 .button {
-  height: auto;
+  height: 30px;
+  padding: 10px;
   display: inline-block;
-  font-size: 18px;
-  line-height: 24px;
+  font-size: 24px;
+  line-height: 28px;
   text-align: center;
   float: none;
 }
@@ -90,4 +105,66 @@ nav, header {
   display: block;
   font-size: 12px;
   line-height: 16px;
+}
+
+#primary {
+    background: -moz-radial-gradient(center 45px , ellipse farthest-corner, #F5F1E8 0px, #FFFFFF 100%) repeat scroll 0 0 #FFFFFF;
+    background: -webkit-radial-gradient(center 45px , ellipse farthest-corner, #F5F1E8 0px, #FFFFFF 100%) repeat scroll 0 0 #FFFFFF;
+    background:  radial-gradient(center 45px , ellipse farthest-corner, #F5F1E8 0px, #FFFFFF 100%) repeat scroll 0 0 #FFFFFF;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1), 0 0 0 1px #FFFFFF;
+    height: 305px;
+    margin-top: 75px;
+    margin-bottom: 30px;
+}
+.gladius-col {
+width: 400px;
+}
+.paddedup {
+padding-right: 50px;
+padding-top: 10px;
+}
+.external .col {
+    float: left;
+    width: 33%;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px;
+}
+.external .col:first-child {
+    padding-left: 0
+}	
+.external {
+    overflow: hidden;
+    border-top: 1px solid black;
+}
+.external h2 {
+    padding-top: 40px;
+    color: #2e2e2d;
+    background: url("img/icons.png") no-repeat 0 -440px transparent;
+}
+.tweet a {
+    font-weight: bold;
+}
+.moz h2 {
+    background-position: 0 -590px;
+}
+.learn h2 {
+    background-position: 0 -740px;
+}
+.external p {
+    font-size: 14px;
+    color: #454545;
+}
+.external ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+.external li {
+    border-top: 1px solid #d8dadc;
+    font-size: 14px;
+    padding: 0.5em 0;
+}
+.external li:first-child {
+    border-top: none;
 }
