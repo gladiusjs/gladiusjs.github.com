@@ -107,12 +107,24 @@ nav, header {
   line-height: 16px;
 }
 
+#gridlayout {
+    margin-top: 75px;
+    margin-bottom: 30px;
+}
+
+#griditem {
+    margin-right: 12px;
+    margin-left: 12px;
+    margin-bottom: 24px;
+    border-bottom: 0px;
+}
+
 #primary {
     background: -moz-radial-gradient(center 45px , ellipse farthest-corner, #F5F1E8 0px, #FFFFFF 100%) repeat scroll 0 0 #FFFFFF;
     background: -webkit-radial-gradient(center 45px , ellipse farthest-corner, #F5F1E8 0px, #FFFFFF 100%) repeat scroll 0 0 #FFFFFF;
     background:  radial-gradient(center 45px , ellipse farthest-corner, #F5F1E8 0px, #FFFFFF 100%) repeat scroll 0 0 #FFFFFF;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1), 0 0 0 1px #FFFFFF;
-    height: 305px;
+    height: 1px;
     margin-top: 75px;
     margin-bottom: 30px;
 }
