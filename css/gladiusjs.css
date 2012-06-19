@@ -115,8 +115,9 @@ nav, header {
 #griditem {
     margin-right: 12px;
     margin-left: 12px;
-    margin-bottom: 24px;
+    margin-bottom: 18px;
     border-bottom: 0px;
+    display: inline-block;
 }
 
 #primary {
@@ -153,7 +154,7 @@ padding-top: 10px;
 .external h2 {
     padding-top: 40px;
     color: #2e2e2d;
-    background: url("img/icons.png") no-repeat 0 -440px transparent;
+    background: url("../icons.png") no-repeat 0 -440px transparent;
 }
 .tweet a {
     font-weight: bold;
