@@ -181,3 +181,7 @@ padding-top: 10px;
 .external li:first-child {
     border-top: none;
 }
+
+#tabzilla {
+  border-bottom: 0; /* make dotted-line indicating clickable go away */
+}
