@@ -41,6 +41,10 @@ document.addEventListener( "DOMContentLoaded", function( e ) {
       var input = engine.findExtension( "gladius-input" );
       var resources = {};
 
+      var materialArgs = '?colorTexture=../assets/images/2576-diffuse.jpg' +
+        '&bumpTexture=../assets/images/2576-bump.jpg' +
+        '&normalTexture=../assets/images/2576-normal.jpg';
+
       engine.get(
         [
           {
@@ -85,7 +89,7 @@ document.addEventListener( "DOMContentLoaded", function( e ) {
           },          
           {
             type: cubicvr.MaterialDefinition,
-            url: "../assets/procedural-material.js",
+            url: "../assets/procedural-material.js" + materialArgs,
             load: engine.loaders.procedural,
             onsuccess: function( material ) {
               resources.material = material;
@@ -183,7 +187,7 @@ document.addEventListener( "DOMContentLoaded", function( e ) {
     // tank, and handle game logic events
     space.add( new Entity( "tank", 
       [
-        new engine.core.Transform( [0, 0, 5], [0, 0, math.TAU/4], [0.5, 0.5, 0.5] ),
+        new engine.core.Transform( [0, 0, 5], [math.TAU/6, 0, 0], [0.5, 0.5, 0.5] ),
         new input.Controller( resources.tankControls ),
         new engine.logic.Actor( tankLogic )
       ],

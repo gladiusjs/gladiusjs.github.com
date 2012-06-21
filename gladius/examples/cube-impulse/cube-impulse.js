@@ -35,6 +35,10 @@ document.addEventListener( "DOMContentLoaded", function( e ) {
 
       var resources = {};
 
+      var materialArgs = '?colorTexture=../assets/images/6583-diffuse.jpg' +
+        '&bumpTexture=../assets/images/6583-bump.jpg' +
+        '&normalTexture=../assets/images/6583-normal.jpg';
+
       engine.get(
         [
           {
@@ -49,7 +53,7 @@ document.addEventListener( "DOMContentLoaded", function( e ) {
           },
           {
             type: engine["gladius-cubicvr"].MaterialDefinition,
-            url: '../assets/procedural-material.js',
+            url: '../assets/procedural-material.js' + materialArgs,
             load: engine.loaders.procedural,
             onsuccess: function( material ) {
               resources.material = material;
@@ -71,18 +75,24 @@ document.addEventListener( "DOMContentLoaded", function( e ) {
     var box2d = engine.findExtension( "gladius-box2d" );
 
     var lightDefinition = new cubicvr.LightDefinition({
-      intensity: 2,
+      intensity: 1,
       light_type: cubicvr.LightDefinition.LightTypes.POINT,
       method: cubicvr.LightDefinition.LightingMethods.DYNAMIC
     });
 
     space.add( new engine.Entity( "camera",
       [
-        new engine.core.Transform( [0, 0, 0] ),
-        new cubicvr.Light( lightDefinition ),
+        new engine.core.Transform( [0, 0, 5] ),
         new cubicvr.Camera( {
           targeted:false
         } )
+      ]
+    ));
+
+    space.add( new engine.Entity( "light",
+      [
+        new engine.core.Transform( [0, 0, -1] ),
+        new cubicvr.Light( lightDefinition )
       ]
     ));
 
@@ -91,20 +101,6 @@ document.addEventListener( "DOMContentLoaded", function( e ) {
         new box2d.Force({force:[0,-1], forceType:box2d.Force.ForceTypes.GLOBAL})
       ]
     ));
-
-    var xCoord, yCoord, zCoord;
-    for (xCoord = -11; xCoord < 11; xCoord = xCoord + 2){
-      for (yCoord = -11; yCoord < 11; yCoord = yCoord + 2){
-        for (zCoord = -11; zCoord < 11; zCoord = zCoord + 2){
-          space.add(new engine.Entity("cubex:" + xCoord + "y:" + yCoord + "z:" + zCoord,
-            [
-              new engine.core.Transform( [xCoord, yCoord, zCoord], [0, 0, 0], [ 0.1, 0.1, 0.1 ] ),
-              new cubicvr.Model( resources.mesh, resources.material )
-            ]
-          ));
-        }
-      }
-    }
 
     var bodyDefinition = new box2d.BodyDefinition();
     var fixtureDefinition = new box2d.FixtureDefinition({shape:new box2d.BoxShape()});
@@ -119,12 +115,33 @@ document.addEventListener( "DOMContentLoaded", function( e ) {
     space.add( parentCube );
 
     var task = new engine.FunctionTask( function() {
+      function getRandom(min, max)
+      {
+        return Math.random() * (max - min) + min;
+      }
       var cubePosition = new engine.math.Vector3( space.findNamed( "cube").findComponent( "Transform").position);
+//      var camera = space.findNamed("camera").findComponent("Camera");
+//      camera.setTarget(cubePosition);
       if (cubePosition[1] < -1.5){
-        var impEvent = new engine.Event('LinearImpulse',{impulse: [0, 1]});
+        var impEvent = new engine.Event('LinearImpulse',{impulse: [getRandom(0,0.1), getRandom(0,1)]});
+        impEvent.dispatch(parentCube);
+      }
+      if (cubePosition[1] > 1.5){
+        var impEvent = new engine.Event('LinearImpulse',{impulse: [getRandom(0,0.1) * -1, getRandom(0, 1) * -1]});
+        impEvent.dispatch(parentCube);
+      }
+      if (cubePosition[0] < -1.5){
+        var impEvent = new engine.Event('LinearImpulse',{impulse: [getRandom(0,1), 0]});
         impEvent.dispatch(parentCube);
 
-        var angEvent = new engine.Event('AngularImpulse',{impulse: 0.1});
+        var angEvent = new engine.Event('AngularImpulse',{impulse: getRandom(0, 0.1)});
+        angEvent.dispatch(parentCube);
+      }
+      if (cubePosition[0] > 1.5){
+        var impEvent = new engine.Event('LinearImpulse',{impulse: [getRandom(0, 1) * -1, 0]});
+        impEvent.dispatch(parentCube);
+
+        var angEvent = new engine.Event('AngularImpulse',{impulse: getRandom(0, 0.1)});
         angEvent.dispatch(parentCube);
       }
     }, {
