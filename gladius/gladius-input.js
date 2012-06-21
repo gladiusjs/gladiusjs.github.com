@@ -1452,10 +1452,6 @@ define('core/event',['require'],function( require ) {
     for( i = 0, l = dispatchList.length; i < l; ++ i ) {
       try {
         var handler = dispatchList[i];
-        if (!handler){
-          var i = 10;
-          debugger;
-        }
         if( handler.handleEvent ) {
           handler.handleEvent.call( handler, this );
         }
