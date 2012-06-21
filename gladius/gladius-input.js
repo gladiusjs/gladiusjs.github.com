@@ -2133,9 +2133,3 @@ define('../src/gladius-input',['require','base/extension','src/services/dispatch
   
 }));
 
-tension = require( "../src/gladius-input" );
-
-  return extension;
-  
-}));
-
