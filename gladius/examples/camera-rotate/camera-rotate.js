@@ -32,6 +32,10 @@ document.addEventListener( "DOMContentLoaded", function( e ) {
 
       var resources = {};
 
+      var materialArgs = '?colorTexture=../assets/images/1422-diffuse.jpg' +
+                         '&bumpTexture=../assets/images/1422-bump.jpg' +
+                         '&normalTexture=../assets/images/1422-normal.jpg';
+
       engine.get(
         [
           {
@@ -46,7 +50,7 @@ document.addEventListener( "DOMContentLoaded", function( e ) {
           },
           {
             type: engine["gladius-cubicvr"].MaterialDefinition,
-            url: '../assets/procedural-material.js',
+            url: '../assets/procedural-material.js' + materialArgs,
             load: engine.loaders.procedural,
             onsuccess: function( material ) {
               resources.material = material;
@@ -67,7 +71,7 @@ document.addEventListener( "DOMContentLoaded", function( e ) {
     var cubicvr = engine.findExtension( "gladius-cubicvr" );
 
     var lightDefinition = new cubicvr.LightDefinition({
-      intensity: 2,
+      intensity: 1,
       light_type: cubicvr.LightDefinition.LightTypes.POINT,
       method: cubicvr.LightDefinition.LightingMethods.DYNAMIC
     })
@@ -83,15 +87,18 @@ document.addEventListener( "DOMContentLoaded", function( e ) {
     ));
 
     var xCoord, yCoord, zCoord;
-    for (xCoord = -11; xCoord < 11; xCoord = xCoord + 2){
-      for (yCoord = -11; yCoord < 11; yCoord = yCoord + 2){
-        for (zCoord = -11; zCoord < 11; zCoord = zCoord + 2){
-          space.add(new engine.Entity("cubex:" + xCoord + "y:" + yCoord + "z:" + zCoord,
-            [
-              new engine.core.Transform( [xCoord, yCoord, zCoord], [0, 0, 0], [ 0.1, 0.1, 0.1 ] ),
-              new cubicvr.Model( resources.mesh, resources.material )
-            ]
-          ));
+    for (xCoord = -2; xCoord <= 2; xCoord = xCoord + 1){
+      for (yCoord = -0.5; yCoord <= 0.5; yCoord = yCoord + 0.5){
+        for (zCoord = -2; zCoord <= 2; zCoord = zCoord + 1){
+          //Get rid of some annoying corner cubes that appear really close to the camera
+          if (!(yCoord === 0 && (xCoord === 1 || xCoord === -1) && (zCoord === 1 || zCoord === -1))){
+            space.add(new engine.Entity("cubex:" + xCoord + "y:" + yCoord + "z:" + zCoord,
+              [
+                new engine.core.Transform( [xCoord, yCoord, zCoord], [0, 0, 0], [ 0.1, 0.1, 0.1 ] ),
+                new cubicvr.Model( resources.mesh, resources.material )
+              ]
+            ));
+          }
         }
       }
     }

@@ -107,15 +107,17 @@ nav, header {
   line-height: 16px;
 }
 
+#examples {
+    margin-top:30px;
+}
+
 #gridlayout {
     margin-top: 75px;
     margin-bottom: 30px;
 }
 
 #griditem {
-    margin-right: 12px;
-    margin-left: 12px;
-    margin-bottom: 18px;
+    margin:0 24px 18px 0;
     border-bottom: 0px;
     display: inline-block;
 }
